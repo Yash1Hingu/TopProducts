@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Card,
     CardContent,
@@ -29,30 +30,25 @@ function AllProducts({ productListProp }) {
     const [maxPrice, setMaxPrice] = useState("");
     const [minRating, setMinRating] = useState("");
     const [available, setDiscountAvailable] = useState(false);
+    const navigate = useNavigate();
 
-    // Function to filter products based on current state
     const filterProducts = () => {
         let filteredList = productListProp.filter(product => {
-            // Filter by category
             if (productCategory !== "all" && product.category !== productCategory) {
                 return false;
             }
-            // Filter by company
             if (company !== "all" && product.company !== company) {
                 return false;
             }
-            // Filter by price range
             if (minPrice !== "" && product.price < parseInt(minPrice)) {
                 return false;
             }
             if (maxPrice !== "" && product.price > parseInt(maxPrice)) {
                 return false;
             }
-            // Filter by rating
             if (minRating !== "" && product.rating < parseFloat(minRating)) {
                 return false;
             }
-            // Filter by discount availability
             if (available && product.availability === "no") {
                 return false;
             }
@@ -62,42 +58,6 @@ function AllProducts({ productListProp }) {
         setProductList(filteredList);
     };
 
-    // Handle category change
-    const handleCategoryChange = (event) => {
-        const category = event.target.value;
-        setProductCategory(category);
-    };
-
-    // Handle company change
-    const handleCompanyChange = (event) => {
-        const company = event.target.value;
-        setCompany(company);
-    };
-
-    // Handle min price change
-    const handleMinPriceChange = (event) => {
-        const price = event.target.value;
-        setMinPrice(price);
-    };
-
-    // Handle max price change
-    const handleMaxPriceChange = (event) => {
-        const price = event.target.value;
-        setMaxPrice(price);
-    };
-
-    // Handle min rating change
-    const handleMinRatingChange = (event) => {
-        const rating = event.target.value;
-        setMinRating(rating);
-    };
-
-    // Handle discount toggle change
-    const handleDiscountToggle = () => {
-        setDiscountAvailable(!available);
-    };
-
-    // Apply filters when any filter changes
     useEffect(() => {
         filterProducts();
     }, [productCategory, company, minPrice, maxPrice, minRating, available]);
@@ -107,7 +67,7 @@ function AllProducts({ productListProp }) {
             <Box sx={{ display: 'flex', gap: '12px', padding: '14px' }}>
                 <FormControl sx={{ width: '200px' }}>
                     <InputLabel>Category</InputLabel>
-                    <Select value={productCategory} onChange={handleCategoryChange}>
+                    <Select value={productCategory} onChange={(e) => setProductCategory(e.target.value)}>
                         {["all", ...new Set(productListProp.map(({ category }) => category))].map((category) => (
                             <MenuItem key={category} value={category}>
                                 {category}
@@ -117,7 +77,7 @@ function AllProducts({ productListProp }) {
                 </FormControl>
                 <FormControl sx={{ width: '200px' }}>
                     <InputLabel>Company</InputLabel>
-                    <Select value={company} onChange={handleCompanyChange}>
+                    <Select value={company} onChange={(e) => setCompany(e.target.value)}>
                         {["all", ...new Set(productListProp.map(({ company }) => company))].map((company) => (
                             <MenuItem key={company} value={company}>
                                 {company}
@@ -129,7 +89,7 @@ function AllProducts({ productListProp }) {
                     label="Min Price"
                     type="number"
                     value={minPrice}
-                    onChange={handleMinPriceChange}
+                    onChange={(e) => setMinPrice(e.target.value)}
                     inputProps={{ min: 0 }}
                     style={{ margin: '0 10px' }}
                 />
@@ -137,7 +97,7 @@ function AllProducts({ productListProp }) {
                     label="Max Price"
                     type="number"
                     value={maxPrice}
-                    onChange={handleMaxPriceChange}
+                    onChange={(e) => setMaxPrice(e.target.value)}
                     inputProps={{ min: 0 }}
                     style={{ margin: '0 10px' }}
                 />
@@ -145,7 +105,7 @@ function AllProducts({ productListProp }) {
                     label="Min Rating"
                     type="number"
                     value={minRating}
-                    onChange={handleMinRatingChange}
+                    onChange={(e) => setMinRating(e.target.value)}
                     inputProps={{ min: 0, max: 5, step: 0.1 }}
                     style={{ margin: '0 10px' }}
                 />
@@ -153,7 +113,7 @@ function AllProducts({ productListProp }) {
                     control={
                         <Checkbox
                             checked={available}
-                            onChange={handleDiscountToggle}
+                            onChange={() => setDiscountAvailable(!available)}
                             color="primary"
                         />
                     }
@@ -169,7 +129,8 @@ function AllProducts({ productListProp }) {
                 {productList.map(({ availability, category, company, discount, price, productName, rating, id }) => (
                     <Card
                         key={id}
-                        sx={{ maxWidth: 345, m: 2, position: 'relative' }}
+                        sx={{ maxWidth: 345, m: 2, position: 'relative', cursor: 'pointer' }}
+                        onClick={() => navigate(`/product/${id}`)}
                     >
                         <Badge
                             badgeContent="Unavailable"
