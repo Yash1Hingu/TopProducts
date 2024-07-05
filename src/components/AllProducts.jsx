@@ -64,7 +64,7 @@ function AllProducts({ productListProp }) {
 
     return (
         <div>
-            <Box sx={{ display: 'flex', gap: '12px', padding: '14px' }}>
+            <Box sx={{ display: 'flex', gap: '12px', padding: '14px', flexWrap:"wrap", justifyContent: "center"}}>
                 <FormControl sx={{ width: '200px' }}>
                     <InputLabel>Category</InputLabel>
                     <Select value={productCategory} onChange={(e) => setProductCategory(e.target.value)}>
@@ -91,7 +91,7 @@ function AllProducts({ productListProp }) {
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
                     inputProps={{ min: 0 }}
-                    style={{ margin: '0 10px' }}
+                    style={{ margin: '0 10px' ,width: '200px'}}
                 />
                 <TextField
                     label="Max Price"
@@ -99,7 +99,7 @@ function AllProducts({ productListProp }) {
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
                     inputProps={{ min: 0 }}
-                    style={{ margin: '0 10px' }}
+                    style={{ margin: '0 10px' ,width: '200px'}}
                 />
                 <TextField
                     label="Min Rating"
@@ -107,7 +107,7 @@ function AllProducts({ productListProp }) {
                     value={minRating}
                     onChange={(e) => setMinRating(e.target.value)}
                     inputProps={{ min: 0, max: 5, step: 0.1 }}
-                    style={{ margin: '0 10px' }}
+                    style={{ margin: '0 10px' ,width: '200px'}}
                 />
                 <FormControlLabel
                     control={
@@ -118,7 +118,7 @@ function AllProducts({ productListProp }) {
                         />
                     }
                     label="Available"
-                    style={{ margin: '10px 0' }}
+                    style={{ margin: '10px 0' ,width: '200px'}}
                 />
             </Box>
             <Grid
